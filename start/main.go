@@ -5,7 +5,8 @@ import (
 	"os"
 
 	"github.com/google/uuid"
-	"github.com/pieterclaerhout/example-temporal"
+	"github.com/pieterclaerhout/example-temporal/activities"
+	"github.com/pieterclaerhout/example-temporal/workflows"
 	"github.com/pieterclaerhout/go-log"
 	"go.temporal.io/sdk/client"
 )
@@ -36,17 +37,17 @@ func runWithdraw(c client.Client) {
 
 	options := client.StartWorkflowOptions{
 		ID:        "transfer-money-workflow",
-		TaskQueue: example.TransferMoneyTaskQueue,
+		TaskQueue: activities.TransferMoneyTaskQueue,
 	}
 
-	transferDetails := example.TransferDetails{
+	transferDetails := activities.TransferDetails{
 		Amount:      54.99,
 		FromAccount: "001-001",
 		ToAccount:   "002-002",
 		ReferenceID: uuid.New().String(),
 	}
 
-	we, err := c.ExecuteWorkflow(context.Background(), options, example.TransferMoney, transferDetails)
+	we, err := c.ExecuteWorkflow(context.Background(), options, workflows.TransferMoney, transferDetails)
 	log.CheckError(err)
 
 	log.InfoDump(transferDetails, we.GetID()+"|"+we.GetRunID())
@@ -57,10 +58,10 @@ func runGreeting(c client.Client) {
 
 	options := client.StartWorkflowOptions{
 		ID:        "greeting-workflow",
-		TaskQueue: example.GreetingTaskQueue,
+		TaskQueue: activities.GreetingTaskQueue,
 	}
 	name := "World"
-	we, err := c.ExecuteWorkflow(context.Background(), options, example.GreetingWorkflow, name)
+	we, err := c.ExecuteWorkflow(context.Background(), options, workflows.GreetingWorkflow, name)
 	log.CheckError(err)
 
 	var greeting string

@@ -1,17 +1,28 @@
+LDFLAGS := -ldflags '-w -s -extldflags "-static"'
+BUILD_CMD := CGO_ENABLED=0 go build -ldflags '-w -s -extldflags "-static"'
+
 install-server:
 	@curl -L https://github.com/temporalio/temporal/releases/latest/download/docker.tar.gz | tar -xz --strip-components 1 docker/docker-compose.yml
 
 run-server:
 	docker-compose up
 
-run-start-withdraw:
-	go run start/main.go withdraw
+build-start:
+	$(BUILD_CMD) -o dist/start start/main.go
 
-run-start-greeting:
-	go run start/main.go greeting
+build-worker:
+	$(BUILD_CMD) -o dist/worker worker/main.go
 
-run-worker-withdraw:
-	go run worker/main.go withdraw
+build: build-start build-worker
 
-run-worker-greeting:
-	go run worker/main.go greeting
+run-start-withdraw: build-start
+	./dist/start withdraw
+
+run-start-greeting: build-start
+	./dist/start greeting
+
+run-worker-withdraw: build-worker
+	./dist/worker withdraw
+
+run-worker-greeting: build-worker
+	./dist/worker greeting

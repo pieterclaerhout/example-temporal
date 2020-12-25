@@ -3,7 +3,8 @@ package main
 import (
 	"os"
 
-	"github.com/pieterclaerhout/example-temporal"
+	"github.com/pieterclaerhout/example-temporal/activities"
+	"github.com/pieterclaerhout/example-temporal/workflows"
 	"github.com/pieterclaerhout/go-log"
 	"go.temporal.io/sdk/client"
 	"go.temporal.io/sdk/worker"
@@ -33,11 +34,11 @@ func main() {
 
 func runWorkerWithdraw(c client.Client) {
 
-	w := worker.New(c, example.TransferMoneyTaskQueue, worker.Options{})
+	w := worker.New(c, activities.TransferMoneyTaskQueue, worker.Options{})
 
-	w.RegisterWorkflow(example.TransferMoney)
-	w.RegisterActivity(example.Withdraw)
-	w.RegisterActivity(example.Deposit)
+	w.RegisterWorkflow(workflows.TransferMoney)
+	w.RegisterActivity(activities.Withdraw)
+	w.RegisterActivity(activities.Deposit)
 
 	err := w.Run(worker.InterruptCh())
 	log.CheckError(err)
@@ -46,10 +47,10 @@ func runWorkerWithdraw(c client.Client) {
 
 func runWorkerGreeting(c client.Client) {
 
-	w := worker.New(c, example.GreetingTaskQueue, worker.Options{})
+	w := worker.New(c, activities.GreetingTaskQueue, worker.Options{})
 
-	w.RegisterWorkflow(example.GreetingWorkflow)
-	w.RegisterActivity(example.ComposeGreeting)
+	w.RegisterWorkflow(workflows.GreetingWorkflow)
+	w.RegisterActivity(activities.ComposeGreeting)
 
 	err := w.Run(worker.InterruptCh())
 	log.CheckError(err)

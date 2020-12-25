@@ -1,11 +1,19 @@
-package example
+package activities
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/pieterclaerhout/go-log"
 )
+
+const TransferMoneyTaskQueue = "TRANSFER_MONEY_TASK_QUEUE"
+
+type TransferDetails struct {
+	Amount      float32
+	FromAccount string
+	ToAccount   string
+	ReferenceID string
+}
 
 func Withdraw(ctx context.Context, transferDetails TransferDetails) error {
 	log.Infof(
@@ -25,9 +33,4 @@ func Deposit(ctx context.Context, transferDetails TransferDetails) error {
 		transferDetails.ReferenceID,
 	)
 	return nil
-}
-
-func ComposeGreeting(name string) (string, error) {
-	greeting := fmt.Sprintf("Hello %s!", name)
-	return greeting, nil
 }
