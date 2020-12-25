@@ -2,6 +2,7 @@ package example
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/pieterclaerhout/go-log"
 )
@@ -24,4 +25,9 @@ func Deposit(ctx context.Context, transferDetails TransferDetails) error {
 		transferDetails.ReferenceID,
 	)
 	return nil
+}
+
+func ComposeGreeting(name string) (string, error) {
+	greeting := fmt.Sprintf("Hello %s!", name)
+	return greeting, nil
 }

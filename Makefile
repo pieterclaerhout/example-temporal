@@ -4,8 +4,14 @@ install-server:
 run-server:
 	docker-compose up
 
-run-start:
-	go run start/main.go
+run-start-withdraw:
+	go run start/main.go withdraw
 
-run-worker:
-	go run worker/main.go
+run-start-greeting:
+	go run start/main.go greeting
+
+run-worker-withdraw:
+	go run worker/main.go withdraw
+
+run-worker-greeting:
+	go run worker/main.go greeting
