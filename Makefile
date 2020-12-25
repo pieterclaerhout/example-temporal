@@ -15,14 +15,20 @@ build-worker:
 
 build: build-start build-worker
 
-run-start-withdraw: build-start
-	./dist/start withdraw
+run-start-transfer: build-start
+	./dist/start transfer
 
 run-start-greeting: build-start
 	./dist/start greeting
 
-run-worker-withdraw: build-worker
-	./dist/worker withdraw
+run-start-cron: build-start
+	./dist/start cron
+
+run-worker-transfer: build-worker
+	./dist/worker transfer
 
 run-worker-greeting: build-worker
 	./dist/worker greeting
+
+run-worker-cron: build-worker
+	./dist/worker cron

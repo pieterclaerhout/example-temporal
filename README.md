@@ -1,4 +1,4 @@
-# Temporal
+# Temporal Example
 
 Example on using [Temporal](https://temporal.io).
 
@@ -17,14 +17,14 @@ To run this example, you need to have [Docker](https://docker.io) and [Go](https
 2. Run the workers:
 
     ```
-    make run-worker-withdraw
+    make run-worker-transfer
     make run-worker-greeting
     ```
 
 3. Fire off some tasks
 
     ```
-    make run-start-withdraw
+    make run-start-transfer
     make run-start-greeting
     ```
 

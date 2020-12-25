@@ -1,4 +1,4 @@
-package activities
+package transfer
 
 import (
 	"context"
@@ -6,7 +6,7 @@ import (
 	"github.com/pieterclaerhout/go-log"
 )
 
-const TransferMoneyTaskQueue = "TRANSFER_MONEY_TASK_QUEUE"
+const TaskQueue = "TRANSFER_MONEY_TASK_QUEUE"
 
 type TransferDetails struct {
 	Amount      float32

@@ -1,0 +1,49 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "example-temporal: build",
+            "type": "shell",
+            "command": "make build",
+            "problemMatcher": ["$go"]
+        },
+        {
+            "label": "example-temporal: start transfer",
+            "type": "shell",
+            "command": "make run-start-transfer",
+            "problemMatcher": []
+        },
+        {
+            "label": "example-temporal: start greeting",
+            "type": "shell",
+            "command": "make run-start-greeting",
+            "problemMatcher": []
+        },
+        {
+            "label": "example-temporal: start cron",
+            "type": "shell",
+            "command": "make run-start-cron",
+            "problemMatcher": []
+        },
+        {
+            "label": "example-temporal: worker transfer",
+            "type": "shell",
+            "command": "make run-worker-transfer",
+            "problemMatcher": []
+        },
+        {
+            "label": "example-temporal: worker greeting",
+            "type": "shell",
+            "command": "make run-worker-greeting",
+            "problemMatcher": []
+        },
+        {
+            "label": "example-temporal: worker cron",
+            "type": "shell",
+            "command": "make run-worker-cron",
+            "problemMatcher": []
+        }
+    ]
+}

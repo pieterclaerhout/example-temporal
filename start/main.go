@@ -5,49 +5,54 @@ import (
 	"os"
 
 	"github.com/google/uuid"
-	"github.com/pieterclaerhout/example-temporal/activities"
-	"github.com/pieterclaerhout/example-temporal/workflows"
+	"github.com/pieterclaerhout/example-temporal/environ"
+	"github.com/pieterclaerhout/example-temporal/workflows/cron"
+	"github.com/pieterclaerhout/example-temporal/workflows/greeting"
+	"github.com/pieterclaerhout/example-temporal/workflows/transfer"
 	"github.com/pieterclaerhout/go-log"
 	"go.temporal.io/sdk/client"
 )
 
 func main() {
 
-	c, err := client.NewClient(client.Options{})
+	log.PrintColors = true
+
+	c, err := environ.NewClient()
 	log.CheckError(err)
 	defer c.Close()
 
-	log.InfoDump(os.Args, "os.Args")
 	if len(os.Args) != 2 {
-		log.Fatal("No arg specified: withdraw | greeting")
+		log.Fatal("No arg specified: transfer | greeting")
 	}
 
 	switch os.Args[1] {
-	case "withdraw":
-		runWithdraw(c)
+	case "transfer":
+		runTransfer(c)
 	case "greeting":
 		runGreeting(c)
+	case "cron":
+		runCron(c)
 	default:
 		log.Fatal("Unknown argument:", os.Args[1])
 	}
 
 }
 
-func runWithdraw(c client.Client) {
+func runTransfer(c client.Client) {
 
 	options := client.StartWorkflowOptions{
 		ID:        "transfer-money-workflow",
-		TaskQueue: activities.TransferMoneyTaskQueue,
+		TaskQueue: transfer.TaskQueue,
 	}
 
-	transferDetails := activities.TransferDetails{
+	transferDetails := transfer.TransferDetails{
 		Amount:      54.99,
 		FromAccount: "001-001",
 		ToAccount:   "002-002",
 		ReferenceID: uuid.New().String(),
 	}
 
-	we, err := c.ExecuteWorkflow(context.Background(), options, workflows.TransferMoney, transferDetails)
+	we, err := c.ExecuteWorkflow(context.Background(), options, transfer.TransferMoney, transferDetails)
 	log.CheckError(err)
 
 	log.InfoDump(transferDetails, we.GetID()+"|"+we.GetRunID())
@@ -58,10 +63,10 @@ func runGreeting(c client.Client) {
 
 	options := client.StartWorkflowOptions{
 		ID:        "greeting-workflow",
-		TaskQueue: activities.GreetingTaskQueue,
+		TaskQueue: greeting.TaskQueue,
 	}
 	name := "World"
-	we, err := c.ExecuteWorkflow(context.Background(), options, workflows.GreetingWorkflow, name)
+	we, err := c.ExecuteWorkflow(context.Background(), options, greeting.GreetingWorkflow, name)
 	log.CheckError(err)
 
 	var greeting string
@@ -69,5 +74,21 @@ func runGreeting(c client.Client) {
 	log.CheckError(err)
 
 	log.InfoDump(greeting, we.GetID()+"|"+we.GetRunID())
+
+}
+
+func runCron(c client.Client) {
+
+	workflowID := "cron_" + uuid.New().String()
+	workflowOptions := client.StartWorkflowOptions{
+		ID:           workflowID,
+		TaskQueue:    "cron",
+		CronSchedule: "* * * * *",
+	}
+
+	we, err := c.ExecuteWorkflow(context.Background(), workflowOptions, cron.SampleCronWorkflow)
+	log.CheckError(err)
+
+	log.Info("Started workflow", "WorkflowID", we.GetID()+"|"+we.GetRunID())
 
 }

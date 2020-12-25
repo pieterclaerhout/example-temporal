@@ -1,10 +1,10 @@
-package activities
+package greeting
 
 import (
 	"fmt"
 )
 
-const GreetingTaskQueue = "GREETING_TASK_QUEUE"
+const TaskQueue = "GREETING_TASK_QUEUE"
 
 func ComposeGreeting(name string) (string, error) {
 	greeting := fmt.Sprintf("Hello %s!", name)

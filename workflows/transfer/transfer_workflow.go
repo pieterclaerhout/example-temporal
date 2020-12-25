@@ -1,14 +1,13 @@
-package workflows
+package transfer
 
 import (
 	"time"
 
-	"github.com/pieterclaerhout/example-temporal/activities"
 	"go.temporal.io/sdk/temporal"
 	"go.temporal.io/sdk/workflow"
 )
 
-func TransferMoney(ctx workflow.Context, transferDetails activities.TransferDetails) error {
+func TransferMoney(ctx workflow.Context, transferDetails TransferDetails) error {
 
 	retrypolicy := &temporal.RetryPolicy{
 		InitialInterval:    time.Second,
@@ -24,12 +23,12 @@ func TransferMoney(ctx workflow.Context, transferDetails activities.TransferDeta
 
 	ctx = workflow.WithActivityOptions(ctx, options)
 
-	err := workflow.ExecuteActivity(ctx, activities.Withdraw, transferDetails).Get(ctx, nil)
+	err := workflow.ExecuteActivity(ctx, Withdraw, transferDetails).Get(ctx, nil)
 	if err != nil {
 		return err
 	}
 
-	err = workflow.ExecuteActivity(ctx, activities.Deposit, transferDetails).Get(ctx, nil)
+	err = workflow.ExecuteActivity(ctx, Deposit, transferDetails).Get(ctx, nil)
 	if err != nil {
 		return err
 	}
